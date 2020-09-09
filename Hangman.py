@@ -66,7 +66,7 @@ def game(wordList):
     # Choose a random word from the word list
     chosenWord = words[random.randint(0, len(words)-1)]
     # Show the user how many letters are in the chosen word and print the appropriate amount of blanks
-    print("\nYour word has: " + str(len(chosenWord)) + " letters in it.")
+    print("\nYour word has: " + str(len(chosenWord)) + " letters in it.\n")
     blanks = "_ " * len(chosenWord)
     print(blanks)
 
