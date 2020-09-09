@@ -120,27 +120,39 @@ def game(wordList):
                     numCorrect = 0
                     # Set an index value to 0 (to keep track of the letters' positions in the word)
                     index = 0
-                    
+
                     # Counter that detects duplicate letters in a word
                     num = Counter(chosenWord)
-                    # For each letter in said word
-                    for i in chosenWord:
-                        # If a duplicate is detected
-                        if (num[i] > 1):
-                            # Create an array and enumerate through the word, storing the indices of each duplicate
-                            indices = [index for index, element in enumerate(chosenWord) if element == i]
-                            break
-                    
+                    result = []
+              
                     # For each letter in the secret word
                     for i in chosenWord:
                         # If the inputted letter matches a letter in the word (guessed correctly)
-                        if (letterInput == i):
-                            # and if the player hasn't already guessed this letter
+                        if (letterInput == i):                  
+                            # And if the player hasn't already guessed this letter
                             if (alreadyGuessed == False):
-                                # Increment the number of correct letters for each instance of that letter in the word
-                                numCorrect += 1
-                                # Set the index value to the index of the input within the secret word
-                                index = chosenWord.index(letterInput)
+                                 # If there are multiple instances of that letter in the word
+                                if (num[letterInput] > 1):
+                                    # For each element of the result array (letter positions)
+                                    for i in result:
+                                        # Increment the number of correct letters for each instance of that letter in the word
+                                        numCorrect += 1
+                                        # Set the index value to the index of the input within the secret word
+                                        index = chosenWord.index(letterInput)
+                                # Otherwise, if there is only one instance of that letter in the word
+                                else:
+                                    # Increment the number of correct letters in the word by 1
+                                    numCorrect += 1
+                                    # Set the index value to the index of the input within the secret word
+                                    index = chosenWord.index(letterInput)  
+                                # If a duplicate is detected
+                                    if (num[letterInput] > 1):
+                                    # Create an array and enumerate through the word, storing the indices of each duplicate
+                                        indices = [index for index, element in enumerate(chosenWord) if element == i]
+                                        for x in indices:
+                                            if x not in result:
+                                               result.append(x)         
+                    
                     # If the user guessed a letter that is found once in the word
                     if (numCorrect == 1):
                         # Increment the correct letters (this is used to track win condition) 
@@ -160,11 +172,13 @@ def game(wordList):
                         # Tell them this
                         print("\nThere are " + str(numCorrect) + " " + letterInput + "'s in the word.")
                         # For each element in the indices array created for duplicates
-                        for j in indices:
-                            # Splice in the letters at each index a duplicate was found
+                        for j in result:
+                            #Splice in the letters at each index a duplicate was found
                             blanks = blanks[:j * 2] + letterInput + blanks[(j * 2)+1:]
+                        print(result)
                         # Reprint the blanks string
                         print("\n" + blanks)
+                        
                     # If the user guessed an incorrect letter
                     else:
                         # and if the user has not already guessed this letter
