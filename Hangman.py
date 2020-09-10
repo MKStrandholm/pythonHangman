@@ -1,6 +1,9 @@
 import random
 from collections import Counter
 
+# Boolean to track game win/lose condition
+gameOver = False
+
 # Replay function. This is called when the win or lose condition is met to prompt the user to either replay or exit
 def replay():
     print("\nWould you like to play again? 1) Yes 2) No")
@@ -13,11 +16,11 @@ def replay():
         # If said input is a digit, cast it as such
         if (playAgainChoice.isdigit()):
             playAgainChoice = int(playAgainChoice)
-
             # If the user entered 1, flip the game over bool flag which begins a new game
             if (playAgainChoice == 1):
                 validPlayAgain = True
-                gameOver = False
+                # A bool to control the input loop
+                gameOver = False           
             # If the user entered 2, print a goodbye message and exit the program
             elif (playAgainChoice == 2):
                 validPlayAgain = True
@@ -32,7 +35,8 @@ def replay():
             # If the user entered YES, flip the game over bool flag which begins a new game
             if (playAgainChoice == "YES"):
                 validPlayAgain = True
-                gameOver = False
+                # A bool to control the input loop
+                gameOver = False   
             # If the user entered NO, print the goodbye message and exit the program
             elif (playAgainChoice == "NO"):
                 validPlayAgain = True
@@ -88,6 +92,7 @@ def game(wordList):
             else:
                 # Prompt user for a letter
                 letterInput = input("\nGuess a letter: ")
+                  
                 # If user input is NOT an alphabetical character, or the input is greater than a single char
                 if (letterInput.isalpha() == False or len(letterInput) > 1):
                     # Prompt the user with an error message
@@ -124,34 +129,33 @@ def game(wordList):
                     # Counter that detects duplicate letters in a word
                     num = Counter(chosenWord)
                     result = []
-              
+
                     # For each letter in the secret word
                     for i in chosenWord:
                         # If the inputted letter matches a letter in the word (guessed correctly)
-                        if (letterInput == i):                  
+                        if (letterInput == i):
                             # And if the player hasn't already guessed this letter
                             if (alreadyGuessed == False):
                                  # If there are multiple instances of that letter in the word
                                 if (num[letterInput] > 1):
-                                    # For each element of the result array (letter positions)
-                                    for i in result:
-                                        # Increment the number of correct letters for each instance of that letter in the word
-                                        numCorrect += 1
-                                        # Set the index value to the index of the input within the secret word
-                                        index = chosenWord.index(letterInput)
-                                # Otherwise, if there is only one instance of that letter in the word
-                                else:
+                                # Create an array and enumerate through the word, storing the indices of each duplicate
+                                    indices = [index for index, element in enumerate(chosenWord) if element == i]
+                                    for x in indices:
+                                        if x not in result:
+                                            result.append(x)
+                                # If there is 1 or less instances of a letter
+                                elif (num[letterInput] <= 1):
                                     # Increment the number of correct letters in the word by 1
                                     numCorrect += 1
                                     # Set the index value to the index of the input within the secret word
-                                    index = chosenWord.index(letterInput)  
-                                # If a duplicate is detected
-                                    if (num[letterInput] > 1):
-                                    # Create an array and enumerate through the word, storing the indices of each duplicate
-                                        indices = [index for index, element in enumerate(chosenWord) if element == i]
-                                        for x in indices:
-                                            if x not in result:
-                                               result.append(x)         
+                                    index = chosenWord.index(letterInput)
+                   
+                    # For each element of the result array (letter positions)
+                    for i in result:
+                        # Increment the number of correct letters for each instance of that letter in the word
+                        numCorrect += 1
+                        # Set the index value to the index of the input within the secret word
+                        index = chosenWord.index(letterInput)
                     
                     # If the user guessed a letter that is found once in the word
                     if (numCorrect == 1):
@@ -175,7 +179,6 @@ def game(wordList):
                         for j in result:
                             #Splice in the letters at each index a duplicate was found
                             blanks = blanks[:j * 2] + letterInput + blanks[(j * 2)+1:]
-                        print(result)
                         # Reprint the blanks string
                         print("\n" + blanks)
                         
@@ -227,15 +230,12 @@ def music():
     game(musicWords)
         
 # Program Start
-# Boolean to track game win/lose condition
-gameOver = False
 
 # If the game is not yet finished, run the intro
 while (gameOver == False):
     print("\nWelcome to Hangman! Try to guess the word, but remember: you only have 6 lives! \nPick a subject: 1) Planets 2) Colors 3) Music")
-    # A bool to control the input loop
-    validChoice = False
 
+    validChoice = False
     ''' While the player has not yet entered a valid choice for subject,
     and the game isn't over yet '''
     while (validChoice == False):
