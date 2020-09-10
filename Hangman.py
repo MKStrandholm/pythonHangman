@@ -188,11 +188,13 @@ def game(wordList):
                             # If the lives count is greater than 1 
                             if (lives > 1):
                                 # Print a message using "lives" plural form
-                                print("\nThere are no " + letterInput + "'s in the word. You have " + str(lives) + " lives remaining.")
+                                print("\nThere are no " + letterInput + "'s in the word. You have " + str(lives) + " lives remaining.\n")
+                                print(blanks)
                             # If the lives count is exactly 1
                             elif  (lives == 1):
                                 # Print a message using "life" singular form
-                                print("\nThere are no " + letterInput + "'s in the word. You have " + str(lives) + " life remaining.")
+                                print("\nThere are no " + letterInput + "'s in the word. You have " + str(lives) + " life remaining.\n")
+                                print(blanks)
         # If the player has run out of lives
         else:
             # Flip bool flag to end the input loop
